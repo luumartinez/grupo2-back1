@@ -19,6 +19,16 @@ class Server {
     this.app.use(morgan('dev'))
   }
 
+  routes() { 
+    /* routes */
+  }
+
+  listen() {
+    this.app.listen(this.port, () => {
+      console.log('Server ok en el puerto', this.port)
+    })
+  }
+
 }
 
 module.exports = Server
