@@ -67,5 +67,12 @@ const VideojuegoSchema = new Schema({
   },
 });
 
+VideojuegoSchema.methods.toJSON = function(){
+    const {__v, ...videojuego } = this.toObject()
+    return videojuego 
+  }
+
+const VideojuegoModel = model("videojuegos", VideojuegoSchema);
+module.exports = VideojuegoModel;
 
 
