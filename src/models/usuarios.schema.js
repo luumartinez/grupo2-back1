@@ -33,6 +33,10 @@ const UsuarioSchema = new Schema({
     min: [8, "La contraseña debe tener por lo menos 8 caracteres"],
     max: [20, "La contraseña NO debe tener más de 20 caracteres"],
   },
+  foto: {
+    type: String,
+    default: "",
+  },
   rol: {
     type: String,
     default: "usuario",
@@ -50,10 +54,10 @@ const UsuarioSchema = new Schema({
   },
 });
 
-UsuarioSchema.method.toJSON = function() {
-    const {contrasenia, _v, ...usuario} = this.toObject();
-    return usuario;
-}
+UsuarioSchema.method.toJSON = function () {
+  const { contrasenia, _v, ...usuario } = this.toObject();
+  return usuario;
+};
 
 const UsuarioModel = model("usuarios", UsuarioSchema);
 module.exports = UsuarioModel;
