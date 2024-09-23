@@ -1,4 +1,7 @@
 const mongoose = require("mongoose");
+const dotenv = require('dotenv');
+
+dotenv.config(); // Asegúrate de cargar las variables de entorno
 
 try {
   mongoose.connect(process.env.MONGO_CONNECT).then(() => {

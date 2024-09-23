@@ -45,13 +45,7 @@ const UsuarioSchema = new Schema({
   bloqueado: {
     type: Boolean,
     default: false,
-  },
-  favoritos: {
-    type: Array,
-  },
-  carrito: {
-    type: Array,
-  },
+  }
 });
 
 UsuarioSchema.method.toJSON = function () {
