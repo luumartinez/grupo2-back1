@@ -145,8 +145,6 @@ const fotoPerfil = async (idUsuario, file) => {
   }
 }
 
-
-
 module.exports = {
   nuevoUsuario,
   inicioSesion,
