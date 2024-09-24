@@ -1,7 +1,6 @@
 const serviceUsuario = require('../services/usuarios.sevices')
 const { validationResult } = require('express-validator')
 
-
 const registrarUsuario = async (req, res) => {
   try {
     const { errors } = validationResult(req)
@@ -90,6 +89,14 @@ const cambiarEstadoUsuario= async (req, res) => {
 };
 
 
+const agregarFotoPerfil = async (req, res) => {
+  const result =  await serviceUsuario.fotoPerfil(req.params.idUsuario, req.file)
+  if(result.statusCode === 200){
+    res.status(200).json({msg: result.msg})
+   }else{
+    res.status(500).json({msg: result.msg})
+   }
+}
 
 module.exports = {
   registrarUsuario,
@@ -97,6 +104,7 @@ module.exports = {
   obtenerTodosLosUsuarios,
   obtenerUnUsuario,
   bajaFisicaUsuario,
-  cambiarEstadoUsuario
+  cambiarEstadoUsuario,
+  agregarFotoPerfil
   
 }

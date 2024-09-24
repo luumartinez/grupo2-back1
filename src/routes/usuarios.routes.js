@@ -1,8 +1,9 @@
 const { Router } = require('express')
-const { registrarUsuario, obtenerTodosLosUsuarios, obtenerUnUsuario, bajaFisicaUsuario, bajaLogicaUsuario, iniciarSesionUsuario, cambiarEstadoUsuario,  } = require('../controllers/usuarios.controllers')
+const { registrarUsuario, obtenerTodosLosUsuarios, obtenerUnUsuario, bajaFisicaUsuario, bajaLogicaUsuario, iniciarSesionUsuario, cambiarEstadoUsuario, agregarFotoPerfil,  } = require('../controllers/usuarios.controllers')
 const router = Router()
 const { check } = require('express-validator')
 const auth = require('../middlewares/auth')
+const multer = require('../middlewares/multer')
 
 router.post('/', [
   check('nombreUsuario', 'Campo USUARIO esta vacio').not().isEmpty(),
@@ -15,12 +16,17 @@ router.post('/login', [
   check('nombreUsuario', 'Campo USUARIO esta vacio').not().isEmpty(),
   check('contrasenia', 'Campo CONTRASEÑA esta vacio').not().isEmpty(),
 ], iniciarSesionUsuario)
+router.post('/fotoPerfil/:idUsuario', multer.single('foto'), auth('admin'), agregarFotoPerfil)
+
+
 router.get('/', auth('admin'),obtenerTodosLosUsuarios)
 router.get('/:idUsuario', [
 /*   check('_id', 'Formato ID incorrecto').isMongoId() */
 ],auth('admin'), obtenerUnUsuario)
 router.delete('/:idUsuario', auth('admin'),bajaFisicaUsuario)
 router.put('/:idUsuario/:accion', auth('admin'),cambiarEstadoUsuario)
+
+
 
 
 module.exports = router

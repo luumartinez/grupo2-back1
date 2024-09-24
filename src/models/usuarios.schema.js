@@ -35,7 +35,7 @@ const UsuarioSchema = new Schema({
   },
   foto: {
     type: String,
-    default: "",
+    default: "https://res.cloudinary.com/dpgb6ec2s/image/upload/v1727194133/iconoPerfil_sja2jo.jpg",
   },
   rol: {
     type: String,
