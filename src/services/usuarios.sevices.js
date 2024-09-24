@@ -23,7 +23,7 @@ const nuevoUsuario = async (body) => {
     body.contrasenia = bcrypt.hashSync(body.contrasenia, salt);
 
 
-    registroUsuario()
+    //registroUsuario()
     const usuario = new UsuarioModel(body)
     // const carrito = new CarritoModel({idUsuario: usuario._id})
     // const favoritos = new FavModel({idUsuario: usuario._id})
@@ -101,13 +101,28 @@ const bajaUsuarioFisica = async (idUsuario) => {
   return 200
 }
 
-const bajaUsuarioLogica = async (idUsuario) => {
-  const usuario = await UsuarioModel.findOne({ _id: idUsuario })
-  usuario.bloqueado = !usuario.bloqueado
+const habilitarUsuario = async(idUsuario) => {
+  const usuario = await UsuarioModel.findById(idUsuario)
+  usuario.bloqueado = false
+  await usuario.save()
 
-  const actualizarUsuario = await UsuarioModel.findByIdAndUpdate({ _id: idUsuario }, usuario, { new: true })
-  return actualizarUsuario
+  return {
+    msg:'Usuario habilitado',
+    statusCode: 200
+    }
 }
+
+const deshabilitarUsuario = async(idUsuario) => {
+  const usuario = await UsuarioModel.findById(idUsuario)
+  usuario.bloqueado = true
+  await usuario.save()
+
+  return {
+    msg:'Usuario deshabilitado',
+    statusCode: 200
+    }
+}
+
 
 
 module.exports = {
@@ -116,5 +131,6 @@ module.exports = {
   obtenerTodosLosUsuarios,
   obtenerUnUsuario,
   bajaUsuarioFisica,
-  bajaUsuarioLogica
+  habilitarUsuario,
+  deshabilitarUsuario
 }

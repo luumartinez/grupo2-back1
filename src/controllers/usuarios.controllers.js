@@ -70,14 +70,26 @@ const bajaFisicaUsuario = async (req, res) => {
   }
 }
 
-const bajaLogicaUsuario = async (req, res) => {
-  try {
-    const usuario = await serviceUsuario.bajaUsuarioLogica(req.params.idUsuario)
-    res.status(200).json({ usuario })
-  } catch (error) {
-    console.log(error)
+const cambiarEstadoUsuario= async (req, res) => {
+  const { idUsuario, accion } = req.params; 
+  
+  let result;
+  if (accion === 'habilitar') {
+    result = await serviceUsuario.habilitarUsuario(idUsuario);
+  } else if (accion === 'deshabilitar') {
+    result = await serviceUsuario.deshabilitarUsuario(idUsuario);
+  } else {
+    return res.status(400).json({ msg: 'Acción no válida' });
   }
-}
+
+  if (result.statusCode === 200) {
+    res.status(200).json({ msg: result.msg });
+  } else {
+    res.status(400).json({ msg: result.msg });
+  }
+};
+
+
 
 module.exports = {
   registrarUsuario,
@@ -85,5 +97,6 @@ module.exports = {
   obtenerTodosLosUsuarios,
   obtenerUnUsuario,
   bajaFisicaUsuario,
-  bajaLogicaUsuario
+  cambiarEstadoUsuario
+  
 }
