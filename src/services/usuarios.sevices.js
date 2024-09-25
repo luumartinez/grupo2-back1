@@ -1,6 +1,7 @@
 const UsuarioModel = require("../models/usuarios.schema")
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const cloudinary = require('../helpers/cloudinary')
 const { registroUsuario } = require("../helpers/mensajes")
 //const CarritoModel = require("../models/carrito.schema")
 //const FavModel = require("../models/favoritos.schema")
@@ -123,7 +124,26 @@ const deshabilitarUsuario = async(idUsuario) => {
     }
 }
 
+const fotoPerfil = async (idUsuario, file) => {
+  try {
+    const usuario = await UsuarioModel.findById(idUsuario)
+    const imagen = await cloudinary.uploader.upload(file.path)
+    usuario.foto = imagen.url
+    await usuario.save()
 
+    return {
+      msg: 'Foto perfil cargada',
+      statusCode: 200
+    }
+
+  } catch (error) {
+    return {
+      msg: 'Error al cargar foto de perfil',
+      statusCode: 500,
+      error
+    }
+  }
+}
 
 module.exports = {
   nuevoUsuario,
@@ -132,5 +152,6 @@ module.exports = {
   obtenerUnUsuario,
   bajaUsuarioFisica,
   habilitarUsuario,
-  deshabilitarUsuario
+  deshabilitarUsuario,
+  fotoPerfil
 }
