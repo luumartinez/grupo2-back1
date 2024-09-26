@@ -39,8 +39,7 @@ const UsuarioSchema = new Schema({
   },
   rol: {
     type: String,
-    default: "usuario",
-    enum: ["admin", "usuario"],
+    default: "usuario"
   },
   bloqueado: {
     type: Boolean,

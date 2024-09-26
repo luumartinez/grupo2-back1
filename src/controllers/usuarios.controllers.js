@@ -58,16 +58,18 @@ const obtenerUnUsuario = async (req, res) => {
   }
 }
 
-const bajaFisicaUsuario = async (req, res) => {
-  try {
-    const res = await serviceUsuario.bajaUsuarioFisica(req.params.idUsuario)
-    if (res === 200) {
-      res.status(200).json({ msg: 'Usuario borrado con exito' })
-    }
-  } catch (error) {
-    console.log(error)
+const eliminarUnUsuario = async (req, res) => {
+  const result = await serviceUsuario.eliminarUsuario(req.params.idUsuario);
+  
+  if (result.statusCode === 200) {
+    res.status(200).json({ msg: result.msg, usuarios: result.usuarios });
+  } else if (result.statusCode === 404) {
+    res.status(404).json({ msg: result.msg });
+  } else {
+    res.status(500).json({ msg: result.msg });
   }
 }
+
 
 const cambiarEstadoUsuario= async (req, res) => {
   const { idUsuario, accion } = req.params; 
@@ -103,7 +105,7 @@ module.exports = {
   iniciarSesionUsuario,
   obtenerTodosLosUsuarios,
   obtenerUnUsuario,
-  bajaFisicaUsuario,
+  eliminarUnUsuario,
   cambiarEstadoUsuario,
   agregarFotoPerfil
   
