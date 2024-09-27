@@ -11,18 +11,28 @@ const nuevoUsuario = async (body) => {
     });
 
     if (usuarioExiste) {
-      return 400;
+      return {
+        status: 400,
+        msg: "El nombre de usuario ya está en uso. Por favor, elige otro."
+      };
     }
 
     let salt = bcrypt.genSaltSync();
     body.contrasenia = bcrypt.hashSync(body.contrasenia, salt);
-    registroUsuario();
+    
     const usuario = new UsuarioModel(body);
     await usuario.save();
 
-    return 201;
+    return {
+      status: 201,
+      msg: "Usuario registrado exitosamente."
+    };
   } catch (error) {
-    console.log(error);
+    console.error("Error al registrar el usuario:", error);
+    return {
+      status: 500,
+      msg: "Ocurrió un error al registrar el usuario. Inténtalo de nuevo más tarde."
+    };
   }
 };
 
@@ -33,7 +43,10 @@ const inicioSesion = async (body) => {
     });
 
     if (!usuarioExiste) {
-      return { code: 400 };
+      return {
+        code: 400,
+        msg: "Nombre de usuario no encontrado. Por favor, verifica tus credenciales."
+      };
     }
 
     const verificacionContrasenia = bcrypt.compareSync(
@@ -52,33 +65,103 @@ const inicioSesion = async (body) => {
 
       return {
         code: 200,
+        msg: "Inicio de sesión exitoso.",
         token,
+        _id: usuarioExiste._id,
+        rol: usuarioExiste.rol
       };
     } else {
-      return { code: 400 };
+      return {
+        code: 400,
+        msg: "Contraseña incorrecta. Intenta nuevamente."
+      };
     }
   } catch (error) {
-    console.log(error);
+    console.error("Error en el inicio de sesión:", error);
+    return {
+      code: 500,
+      msg: "Ocurrió un error al intentar iniciar sesión. Por favor, intenta más tarde."
+    };
   }
 };
+
 
 const obtenerTodosLosUsuarios = async () => {
   try {
     const usuarios = await UsuarioModel.find();
-    return usuarios;
+    if (usuarios.length === 0) {
+      return {
+        msg: 'No se encontraron usuarios en la base de datos.',
+        statusCode: 404
+      };
+    }
+    return {
+      msg: 'Usuarios obtenidos exitosamente.',
+      statusCode: 200,
+      usuarios
+    };
   } catch (error) {
-    console.log(error);
+    console.error('Error al obtener los usuarios:', error);
+    return {
+      msg: 'Ocurrió un error al intentar obtener los usuarios.',
+      statusCode: 500,
+      error: error.message
+    };
   }
 };
 
 const obtenerUnUsuario = async (idUsuario) => {
   try {
-    const usuario = await UsuarioModel.findOne({ _id: idUsuario });
-    return usuario;
+    const usuario = await UsuarioModel.findById(idUsuario);
+    if (!usuario) {
+      return {
+        msg: 'No se encontró un usuario con el ID proporcionado.',
+        statusCode: 404
+      };
+    }
+    return {
+      msg: 'Usuario obtenido exitosamente.',
+      statusCode: 200,
+      usuario
+    };
   } catch (error) {
-    console.log(error);
+    console.error('Error al obtener el usuario:', error);
+    return {
+      msg: 'Ocurrió un error al intentar obtener el usuario.',
+      statusCode: 500,
+      error: error.message
+    };
   }
 };
+
+
+const actualizarUsuario = async (idUsuario, body) => {
+  try {
+    const usuarioActualizado = await UsuarioModel.findByIdAndUpdate({ _id: idUsuario }, body, { new: true });
+
+    if (!usuarioActualizado) {
+      return {
+        msg: 'No se encontró un usuario con el ID proporcionado.',
+        statusCode: 404
+      };
+    }
+
+    return {
+      msg: 'El usuario ha sido actualizado exitosamente.',
+      statusCode: 200,
+      usuario: usuarioActualizado
+    };
+  } catch (error) {
+    return {
+      msg: 'Ocurrió un error al intentar actualizar el usuario. Por favor, verifica los datos enviados.',
+      statusCode: 500,
+      error: error.message
+    };
+  }
+};
+
+
+
 
 const eliminarUsuario = async (idUsuario) => {
   try {
@@ -158,6 +241,7 @@ module.exports = {
   inicioSesion,
   obtenerTodosLosUsuarios,
   obtenerUnUsuario,
+  actualizarUsuario,
   eliminarUsuario,
   habilitarUsuario,
   deshabilitarUsuario,
