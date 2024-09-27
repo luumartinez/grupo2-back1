@@ -41,16 +41,16 @@ router.post(
       check("apellido")
       .not()
       .isEmpty()
-      .withMessage("El campo 'Contraseña' no puede estar vacío.")
+      .withMessage("El campo 'Apellido' no puede estar vacío.")
       .isLength({ min: 3, max: 25 })
       .withMessage("El 'Apellido' debe tener entre 3 y 25 caracteres."),
 
       check("email")
       .not()
       .isEmpty()
-      .withMessage("El campo 'Contraseña' no puede estar vacío.")
+      .withMessage("El campo 'Email' no puede estar vacío.")
       .isLength({ min: 10 })
-      .withMessage("La 'Contraseña' debe tener como minimo 10 caracteres."),
+      .withMessage("La 'Email' debe tener como minimo 10 caracteres."),
   ],
   registrarUsuario
 );

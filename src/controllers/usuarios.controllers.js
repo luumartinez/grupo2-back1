@@ -9,18 +9,23 @@ const registrarUsuario = async (req, res) => {
       return res.status(400).json({ msg: errors[0].msg });
     }
 
+    console.log('Datos recibidos para registrar usuario:', req.body);
+
     const result = await serviceUsuario.nuevoUsuario(req.body);
-    if (result === 201) {
+
+    if (result.status === 201) {
       res.status(201).json({ msg: result.msg });
-    } else if (result === 400) {
+    } else if (result.status === 400) {
       res.status(400).json({ msg: result.msg });
     } else {
       res.status(500).json({ msg: result.msg });
     }
   } catch (error) {
-    console.log(error);
+    console.error('Error en registrarUsuario:', error);
+    res.status(500).json({ msg: 'Error interno del servidor' });
   }
 };
+
 
 const iniciarSesionUsuario = async (req, res) => {
   try {
