@@ -90,6 +90,18 @@ const cambiarEstadoUsuario= async (req, res) => {
   }
 };
 
+const cambiarDatosUsuario = async (req, res) => {
+  const { idUsuario } = req.params; // Obtenemos el ID del usuario de los parámetros
+  const datosActualizados = req.body; // Obtenemos los datos a actualizar del cuerpo de la petición
+  console.log(datosActualizados);
+  // Llamamos al servicio para editar el usuario
+  const result = await serviceUsuario.editarUsuario(idUsuario, datosActualizados);
+
+  // Enviamos la respuesta con base en el resultado del servicio
+  return res.status(result.statusCode).json({ msg: result.msg, usuario: result.usuario });
+};
+
+
 
 const agregarFotoPerfil = async (req, res) => {
   const result =  await serviceUsuario.fotoPerfil(req.params.idUsuario, req.file)
@@ -107,6 +119,7 @@ module.exports = {
   obtenerUnUsuario,
   eliminarUnUsuario,
   cambiarEstadoUsuario,
+  cambiarDatosUsuario,
   agregarFotoPerfil
   
 }

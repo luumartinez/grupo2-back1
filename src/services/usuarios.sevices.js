@@ -114,6 +114,7 @@ const eliminarUsuario = async (idUsuario) => {
 const habilitarUsuario = async (idUsuario) => {
   const usuario = await UsuarioModel.findById(idUsuario);
   usuario.bloqueado = false;
+  console.log(idUsuario);
   await usuario.save();
 
   return {
@@ -131,6 +132,41 @@ const deshabilitarUsuario = async (idUsuario) => {
     msg: "Usuario deshabilitado",
     statusCode: 200,
   };
+};
+
+const editarUsuario = async (idUsuario, datosActualizados) => {
+  try {
+    // Buscar el usuario por ID
+    const usuario = await UsuarioModel.findById(idUsuario);
+
+    // Verificar si el usuario existe
+    if (!usuario) {
+      return {
+        msg: "Usuario no encontrado",
+        statusCode: 404,
+      };
+    }
+
+    // Actualizar los campos del usuario
+    Object.keys(datosActualizados).forEach((key) => {
+      usuario[key] = datosActualizados[key];
+    });
+
+    // Guardar los cambios
+    await usuario.save();
+
+    return {
+      msg: "Usuario actualizado correctamente",
+      statusCode: 200,
+      usuario,
+    };
+  } catch (error) {
+    return {
+      msg: "Error al actualizar el usuario",
+      statusCode: 500,
+      error: error.message,
+    };
+  }
 };
 
 const fotoPerfil = async (idUsuario, file) => {
@@ -162,4 +198,5 @@ module.exports = {
   habilitarUsuario,
   deshabilitarUsuario,
   fotoPerfil,
+  editarUsuario
 };

@@ -7,6 +7,7 @@ const {
   cambiarEstadoUsuario,
   agregarFotoPerfil,
   eliminarUnUsuario,
+  cambiarDatosUsuario,
 } = require("../controllers/usuarios.controllers");
 const router = Router();
 const { check } = require("express-validator");
@@ -56,5 +57,6 @@ router.get(
 );
 router.delete("/:idUsuario", auth("admin"), eliminarUnUsuario);
 router.put("/:idUsuario/:accion", auth("admin"), cambiarEstadoUsuario);
+router.put('/:idUsuario', auth("admin"), cambiarDatosUsuario);
 
 module.exports = router;
