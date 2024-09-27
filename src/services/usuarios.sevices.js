@@ -67,6 +67,8 @@ const inicioSesion = async (body) => {
         code: 200,
         msg: "Inicio de sesión exitoso.",
         token,
+        _id: usuarioExiste._id,
+        rol: usuarioExiste.rol
       };
     } else {
       return {

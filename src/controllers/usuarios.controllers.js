@@ -34,7 +34,8 @@ const iniciarSesionUsuario = async (req, res) => {
     if (result.code === 400) {
       res.status(400).json({ msg: result.msg });
     } else if (result.code === 200){
-      res.status(200).json({ msg: result.msg });
+      res.status(200).json({ msg: result.msg , token: result.token, rol: result.rol,
+        idUsuario:result._id});
     }else {
       res.status(500).json({ msg: result.msg });
     }
