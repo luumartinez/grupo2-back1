@@ -71,6 +71,20 @@ const eliminarUnUsuario = async (req, res) => {
 }
 
 
+const editarUsuario = async (req, res) => {
+  const result = await serviceUsuario.actualizarUsuario(req.params.idUsuario, req.body)
+  
+  if(result.statusCode === 200){
+    res.status(200).json({msg: result.msg})
+   }else if (result.statusCode === 404) {
+    res.status(404).json({ msg: result.msg });
+   }
+   else{
+    res.status(500).json({msg: result.msg})
+   }
+}
+
+
 const cambiarEstadoUsuario= async (req, res) => {
   const { idUsuario, accion } = req.params; 
   
@@ -105,8 +119,8 @@ module.exports = {
   iniciarSesionUsuario,
   obtenerTodosLosUsuarios,
   obtenerUnUsuario,
+  editarUsuario,
   eliminarUnUsuario,
   cambiarEstadoUsuario,
-  agregarFotoPerfil
-  
+  agregarFotoPerfil 
 }

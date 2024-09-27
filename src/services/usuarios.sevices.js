@@ -80,6 +80,34 @@ const obtenerUnUsuario = async (idUsuario) => {
   }
 };
 
+const actualizarUsuario = async (idUsuario, body) => {
+  try {
+    const usuarioActualizado = await UsuarioModel.findByIdAndUpdate({ _id: idUsuario }, body, { new: true });
+
+    if (!usuarioActualizado) {
+      return {
+        msg: 'No se encontró un usuario con el ID proporcionado.',
+        statusCode: 404
+      };
+    }
+
+    return {
+      msg: 'El usuario ha sido actualizado exitosamente.',
+      statusCode: 200,
+      usuario: usuarioActualizado
+    };
+  } catch (error) {
+    return {
+      msg: 'Ocurrió un error al intentar actualizar el usuario. Por favor, verifica los datos enviados.',
+      statusCode: 500,
+      error: error.message
+    };
+  }
+};
+
+
+
+
 const eliminarUsuario = async (idUsuario) => {
   try {
     const usuarioEliminado = await UsuarioModel.findByIdAndDelete({
@@ -158,6 +186,7 @@ module.exports = {
   inicioSesion,
   obtenerTodosLosUsuarios,
   obtenerUnUsuario,
+  actualizarUsuario,
   eliminarUsuario,
   habilitarUsuario,
   deshabilitarUsuario,

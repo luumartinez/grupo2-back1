@@ -7,6 +7,7 @@ const {
   cambiarEstadoUsuario,
   agregarFotoPerfil,
   eliminarUnUsuario,
+  editarUsuario,
 } = require("../controllers/usuarios.controllers");
 const router = Router();
 const { check } = require("express-validator");
@@ -26,7 +27,6 @@ router.post(
       min: 8,
       max: 50,
     }),
-    /*   check('nombreUsuario', 'Formato incorrecto: Tiene que ser un email').isEmail() */
   ],
   registrarUsuario
 );
@@ -56,5 +56,6 @@ router.get(
 );
 router.delete("/:idUsuario", auth("admin"), eliminarUnUsuario);
 router.put("/:idUsuario/:accion", auth("admin"), cambiarEstadoUsuario);
+router.put("/:idUsuario", auth("admin"), editarUsuario);
 
 module.exports = router;
