@@ -22,6 +22,7 @@ class Server {
   routes() { 
     /* routes */
     this.app.use('/api/usuarios', require('../routes/usuarios.routes'))
+    this.app.use('/api/videojuegos', require('../routes/videojuegos.routes'))
   }
 
   listen() {
