@@ -41,11 +41,22 @@ const VideojuegoSchema = new Schema({
       "Xbox Series X",
       "PlayStation 3",
       "Xbox 360",
+      "iOS",
+      "Android",
     ],
   },
   genero: {
     type: [String],
-    enum: ["Acción", "Aventura", "Estrategia", "Deportes", "Simulación"],
+    enum: [
+      "Acción",
+      "Aventura",
+      "Estrategia",
+      "Deportes",
+      "Simulación",
+      "RPG",
+      "Multijugador",
+      "Social"
+    ],
     required: true,
   },
   fechaLanzamiento: {
@@ -67,12 +78,10 @@ const VideojuegoSchema = new Schema({
   },
 });
 
-VideojuegoSchema.methods.toJSON = function(){
-    const {__v, ...videojuego } = this.toObject()
-    return videojuego 
-  }
+VideojuegoSchema.methods.toJSON = function () {
+  const { __v, ...videojuego } = this.toObject();
+  return videojuego;
+};
 
 const VideojuegoModel = model("videojuegos", VideojuegoSchema);
 module.exports = VideojuegoModel;
-
-
