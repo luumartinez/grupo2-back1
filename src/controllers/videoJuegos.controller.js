@@ -29,7 +29,7 @@ const crearVideojuego = async (req, res) => {
 
     const nuevoVideojuego = await serviciosVideojuegos.nuevoVideojuego(req.body);
     await nuevoVideojuego.save();
-    res.status(201).json(nuevoVideojuego);
+    res.status(201).json({msg: "Videojuego creado correctamente", nuevoVideojuego});
 
   } catch (error) {
     res.status(500).json(error);
@@ -46,7 +46,7 @@ const editarVideojuegoPorId = async (req, res) => {
 
     const id = req.params.idVideojuego;
     const videojuegoActualizado = await serviciosVideojuegos.editarVideojuego(id, req.body);
-    res.status(200).json(videojuegoActualizado);
+    res.status(200).json({msg: "Videojuego actualizado correctamente", videojuegoActualizado});
   } catch (error) {
     res.status(500).json(error);
   }
@@ -75,10 +75,17 @@ const buscarVideojuegoPorTermino = async (req, res) => {
   }
 }
 
+
+const habilitarDeshabilitarJuegoPorId = async (req, res) => {
+  const result = await serviciosVideojuegos.habilitarDeshabilitarJuego(req.params.idVideojuego);
+  res.status(result.statusCode).json({ msg: result.msg, videojuego: result.videojuego });
+}
+
 module.exports = {
   obtenerUnVideojuegoPorIdOTodos,
   crearVideojuego,
   editarVideojuegoPorId,
   eliminarVideojuegoPorId,
-  buscarVideojuegoPorTermino
+  buscarVideojuegoPorTermino,
+  habilitarDeshabilitarJuegoPorId
 }

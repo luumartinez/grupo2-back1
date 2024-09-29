@@ -1,5 +1,5 @@
 const express = require('express');
-const { obtenerUnVideojuegoPorIdOTodos, crearVideojuego, editarVideojuegoPorId, eliminarVideojuegoPorId, buscarVideojuegoPorTermino } = require('../controllers/videoJuegos.controller');
+const { obtenerUnVideojuegoPorIdOTodos, crearVideojuego, editarVideojuegoPorId, eliminarVideojuegoPorId, buscarVideojuegoPorTermino, habilitarDeshabilitarJuegoPorId } = require('../controllers/videoJuegos.controller');
 const { check } = require('express-validator');
 const auth = require('../middlewares/auth');
 const multer = require('../middlewares/multer');
@@ -31,5 +31,7 @@ router.put('/:idVideojuego', multer.single('imagen'), [  // Usar multer si se ac
 
 /* DELETE - Borrar */
 router.delete('/:idVideojuego', auth('admin'), eliminarVideojuegoPorId);
+
+router.put('/habilitarDeshabilitar/:idVideojuego', auth('admin'), habilitarDeshabilitarJuegoPorId)
 
 module.exports = router;

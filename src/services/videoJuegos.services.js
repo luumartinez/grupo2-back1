@@ -1,4 +1,4 @@
-const VideojuegoModel = require('../models/VideoJuegos.schema');
+const VideojuegoModel = require('../models/videojuegos.schema');
 
 const obtenerTodosLosVideojuegos = async (limit, to) => {
   const [videojuegos, cantidadTotal] = await Promise.all([
@@ -57,11 +57,39 @@ const eliminarVideojuego = async (idVideojuego) => {
   }
 }
 
+
+const habilitarDeshabilitarJuego = async (idVideojuego) => { 
+  try {
+    const videojuego = await VideojuegoModel.findById(idVideojuego);
+    if (!videojuego) {
+      return {
+        msg: 'Videojuego no encontrado.',
+        statusCode: 404
+      };
+    }
+
+    videojuego.habilitado = !videojuego.habilitado;
+    await videojuego.save();
+
+    return {
+      msg: `El videojuego "${videojuego.nombre}" ha sido ${videojuego.habilitado ? 'habilitado' : 'deshabilitado'} correctamente.`,
+      statusCode: 200,
+      videojuego
+    };
+  } catch (error) {
+    return {
+      msg: 'Ocurrió un error al cambiar el estado del videojuego.',
+      statusCode: 500
+    };
+  }
+}
+
 module.exports = {
   obtenerTodosLosVideojuegos,
   obtenerUnVideojuego,
   nuevoVideojuego,
   editarVideojuego,
   eliminarVideojuego,
-  buscarVideojuego
+  buscarVideojuego,
+  habilitarDeshabilitarJuego
 }
