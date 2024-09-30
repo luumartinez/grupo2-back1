@@ -7,6 +7,7 @@ const {
   buscarVideojuegoPorTermino,
   habilitarDeshabilitarJuegoPorId,
   imagenVideojuego,
+  enviarMensaje,
 } = require("../controllers/videoJuegos.controller");
 const { check } = require("express-validator");
 const auth = require("../middlewares/auth");
@@ -42,6 +43,8 @@ router.post(
   auth("admin"),
   imagenVideojuego
 );
+
+router.post("/enviarWhatsApp", enviarMensaje);
 
 /* PUT - Editar */
 router.put(

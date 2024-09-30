@@ -126,6 +126,7 @@ const agregarFotoPerfil = async (req, res) => {
   }
 };
 
+
 module.exports = {
   registrarUsuario,
   iniciarSesionUsuario,
@@ -134,5 +135,5 @@ module.exports = {
   editarUsuario,
   eliminarUnUsuario,
   cambiarEstadoUsuario,
-  agregarFotoPerfil,
+  agregarFotoPerfil
 };
