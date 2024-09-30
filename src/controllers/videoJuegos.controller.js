@@ -81,11 +81,24 @@ const habilitarDeshabilitarJuegoPorId = async (req, res) => {
   res.status(result.statusCode).json({ msg: result.msg, videojuego: result.videojuego });
 }
 
+const imagenVideojuego = async (req, res) => {
+  const result = await serviciosVideojuegos.cargarImagenVideojuego(
+    req.params.idVideojuego,
+    req.file
+  );
+  if (result.statusCode === 200) {
+    res.status(200).json({ msg: result.msg });
+  } else {
+    res.status(500).json({ msg: result.msg });
+  }
+};
+
 module.exports = {
   obtenerUnVideojuegoPorIdOTodos,
   crearVideojuego,
   editarVideojuegoPorId,
   eliminarVideojuegoPorId,
   buscarVideojuegoPorTermino,
-  habilitarDeshabilitarJuegoPorId
+  habilitarDeshabilitarJuegoPorId,
+  imagenVideojuego
 }

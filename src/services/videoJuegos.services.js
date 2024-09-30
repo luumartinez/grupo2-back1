@@ -1,4 +1,5 @@
 const VideojuegoModel = require('../models/videojuegos.schema');
+const cloudinary = require("../helpers/cloudinary");
 
 const obtenerTodosLosVideojuegos = async (limit, to) => {
   const [videojuegos, cantidadTotal] = await Promise.all([
@@ -7,8 +8,7 @@ const obtenerTodosLosVideojuegos = async (limit, to) => {
   ]);
 
   const paginacion = {
-    videojuegos,
-    cantidadTotal
+    videojuegos
   };
 
   return paginacion;
@@ -84,6 +84,26 @@ const habilitarDeshabilitarJuego = async (idVideojuego) => {
   }
 }
 
+const cargarImagenVideojuego = async (idVideojuego, file) => {
+  try {
+    const videojuego = await VideojuegoModel.findById(idVideojuego);
+    const imagen = await cloudinary.uploader.upload(file.path);
+    videojuego.imagen = imagen.url;
+    await videojuego.save();
+
+    return {
+      msg: "Imagen del videojuego cargada correctamente",
+      statusCode: 200,
+    };
+  } catch (error) {
+    return {
+      msg: "Error al cargar la imagen",
+      statusCode: 500,
+      error,
+    };
+  }
+};
+
 module.exports = {
   obtenerTodosLosVideojuegos,
   obtenerUnVideojuego,
@@ -91,5 +111,6 @@ module.exports = {
   editarVideojuego,
   eliminarVideojuego,
   buscarVideojuego,
-  habilitarDeshabilitarJuego
+  habilitarDeshabilitarJuego,
+  cargarImagenVideojuego
 }
