@@ -93,6 +93,24 @@ const imagenVideojuego = async (req, res) => {
   }
 };
 
+const videojuegoAlCarrito = async (req, res) =>{
+  const result = await serviciosVideojuegos.agregarJuegoACarrito(req.params.idVideojuego, req.idUsuario)
+  if (result.statusCode === 200) {
+    res.status(200).json({ msg: result.msg });
+  } else {
+    res.status(500).json({ msg: result.msg });
+  }
+}
+
+const sacarVideojuegoDelCarrito = async (req, res) =>{
+  const result = await serviciosVideojuegos.borrarJuegoDelCarrito(req.params.idVideojuego, req.idUsuario)
+  if (result.statusCode === 200) {
+    res.status(200).json({ msg: result.msg });
+  } else {
+    res.status(500).json({ msg: result.msg });
+  }
+}
+
 module.exports = {
   obtenerUnVideojuegoPorIdOTodos,
   crearVideojuego,
@@ -100,5 +118,7 @@ module.exports = {
   eliminarVideojuegoPorId,
   buscarVideojuegoPorTermino,
   habilitarDeshabilitarJuegoPorId,
-  imagenVideojuego
+  imagenVideojuego,
+  videojuegoAlCarrito,
+  sacarVideojuegoDelCarrito
 }
