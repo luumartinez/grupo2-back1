@@ -214,6 +214,6 @@ module.exports = {
   cargarImagenVideojuego,
   agregarJuegoACarrito,
   borrarJuegoDelCarrito,
-  mostrarVideojuegoEnCarrito
-  enviarMensajeWhatsapp,
+  mostrarVideojuegoEnCarrito,
+  enviarMensajeWhatsapp
 };
