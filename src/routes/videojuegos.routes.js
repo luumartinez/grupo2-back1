@@ -7,6 +7,9 @@ const {
   buscarVideojuegoPorTermino,
   habilitarDeshabilitarJuegoPorId,
   imagenVideojuego,
+  sacarVideojuegoDelCarrito,
+  videojuegoAlCarrito,
+  verVideojuegoEnCarrito,
   enviarMensaje,
 } = require("../controllers/videoJuegos.controller");
 const { check } = require("express-validator");
@@ -17,7 +20,7 @@ const router = express.Router();
 /* GET - Obtener */
 router.get("/", obtenerUnVideojuegoPorIdOTodos);
 router.get("/buscar", buscarVideojuegoPorTermino);
-
+router.get("/carrito", auth("usuario"), verVideojuegoEnCarrito)
 /* POST - Crear */
 router.post(
   "/",
@@ -43,6 +46,7 @@ router.post(
   auth("admin"),
   imagenVideojuego
 );
+router.post('/carrito/agregar/:idVideojuego', auth("usuario"), videojuegoAlCarrito)
 
 router.post("/enviarWhatsApp", enviarMensaje);
 
@@ -73,5 +77,6 @@ router.put(
 
 /* DELETE - Borrar */
 router.delete("/:idVideojuego", auth("admin"), eliminarVideojuegoPorId);
+router.delete("/eliminarDelCarrito/:idVideojuego", auth("usuario"), sacarVideojuegoDelCarrito);
 
 module.exports = router;

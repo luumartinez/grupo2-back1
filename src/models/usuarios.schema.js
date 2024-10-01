@@ -39,12 +39,19 @@ const UsuarioSchema = new Schema({
   },
   rol: {
     type: String,
-    default: "usuario"
+    default: "usuario", 
+    enum: ["admin", "usuario"]
   },
   bloqueado: {
     type: Boolean,
     default: false,
-  }
+  },
+  favoritos:{
+    type: Array
+  },
+  carrito:{
+    type: Array
+  },
 });
 
 UsuarioSchema.method.toJSON = function () {

@@ -1,5 +1,7 @@
 const VideojuegoModel = require("../models/videojuegos.schema");
 const cloudinary = require("../helpers/cloudinary");
+const UsuarioModel = require("../models/usuarios.schema");
+const mongoose = require("mongoose");
 const configHeaderWhatsApp = require("../helpers/configMeta");
 
 const obtenerTodosLosVideojuegos = async (limit, to) => {
@@ -109,6 +111,62 @@ const cargarImagenVideojuego = async (idVideojuego, file) => {
   }
 };
 
+const agregarJuegoACarrito = async (idVideojuego, idUsuario) => {
+  try {
+    const videojuego = await VideojuegoModel.findById(idVideojuego);
+    const usuario = await UsuarioModel.findById(idUsuario);
+    usuario.carrito.push(videojuego);
+    await usuario.save();
+    return {
+      msg: "Producto agregado al carrito",
+      statusCode: 200,
+    };
+  } catch (error) {
+    return {
+      msg: "Error al agregar el videojuego al carrito",
+      statusCode: 500,
+      error,
+    };
+  }
+};
+
+const borrarJuegoDelCarrito = async (idVideojuego, idUsuario) => {
+  try {
+    const usuario = await UsuarioModel.findById(idUsuario);
+    const posicionVideojuego = usuario.carrito.findIndex(
+      (videoJuego) => videoJuego._id.toString() === idVideojuego
+    );
+    usuario.carrito.splice(posicionVideojuego, 1);
+    await usuario.save();
+    return {
+      msg: "Producto borrado del carrito",
+      statusCode: 200,
+    };
+  } catch (error) {
+    return {
+      msg: "Error al borrar el videojuego del carrito",
+      statusCode: 500,
+      error,
+    };
+  }
+};
+
+const mostrarVideojuegoEnCarrito = async(idUsuario) => {
+  try {
+    const usuario = await UsuarioModel.findById(idUsuario)
+    return {
+      carrito: usuario.carrito,
+      statusCode: 200
+    }
+  } catch (error) {
+    return {
+      msg: "Error al mostrar los videojuegos en el carrito",
+      statusCode: 500,
+      error,
+    };
+  }
+}
+
 const enviarMensajeWhatsapp = async (telefono, plantilla, token, codigo) => {
   const telefonoId = process.env.META_TEL_ID;
   const url = `https://graph.facebook.com/v20.0/${telefonoId}/messages`;
@@ -154,5 +212,8 @@ module.exports = {
   buscarVideojuego,
   habilitarDeshabilitarJuego,
   cargarImagenVideojuego,
+  agregarJuegoACarrito,
+  borrarJuegoDelCarrito,
+  mostrarVideojuegoEnCarrito
   enviarMensajeWhatsapp,
 };

@@ -93,6 +93,34 @@ const imagenVideojuego = async (req, res) => {
   }
 };
 
+
+const videojuegoAlCarrito = async (req, res) =>{
+  const result = await serviciosVideojuegos.agregarJuegoACarrito(req.params.idVideojuego, req.idUsuario)
+  if (result.statusCode === 200) {
+    res.status(200).json({ msg: result.msg });
+  } else {
+    res.status(500).json({ msg: result.msg });
+  }
+}
+
+const sacarVideojuegoDelCarrito = async (req, res) =>{
+  const result = await serviciosVideojuegos.borrarJuegoDelCarrito(req.params.idVideojuego, req.idUsuario)
+  if (result.statusCode === 200) {
+    res.status(200).json({ msg: result.msg });
+  } else {
+    res.status(500).json({ msg: result.msg });
+  }
+}
+
+const verVideojuegoEnCarrito = async (req, res) =>{
+  const result = await serviciosVideojuegos.mostrarVideojuegoEnCarrito(req.idUsuario)
+  if (result.statusCode === 200) {
+    res.status(200).json({ carrito: result.carrito });
+  } else {
+    res.status(500).json({ msg: result.msg });
+  }
+}
+
 const enviarMensaje = async (req, res) => {
   const { telefono, plantilla, token, codigo } = req.body;
   
@@ -116,5 +144,8 @@ module.exports = {
   buscarVideojuegoPorTermino,
   habilitarDeshabilitarJuegoPorId,
   imagenVideojuego,
+  videojuegoAlCarrito,
+  sacarVideojuegoDelCarrito,
+  verVideojuegoEnCarrito,
   enviarMensaje
 }
