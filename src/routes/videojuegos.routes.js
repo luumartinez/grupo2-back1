@@ -9,6 +9,7 @@ const {
   imagenVideojuego,
   sacarVideojuegoDelCarrito,
   videojuegoAlCarrito,
+  verVideojuegoEnCarrito,
 } = require("../controllers/videoJuegos.controller");
 const { check } = require("express-validator");
 const auth = require("../middlewares/auth");
@@ -18,7 +19,7 @@ const router = express.Router();
 /* GET - Obtener */
 router.get("/", obtenerUnVideojuegoPorIdOTodos);
 router.get("/buscar", buscarVideojuegoPorTermino);
-
+router.get("/carrito", auth("usuario"), verVideojuegoEnCarrito)
 /* POST - Crear */
 router.post(
   "/",

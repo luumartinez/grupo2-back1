@@ -111,6 +111,15 @@ const sacarVideojuegoDelCarrito = async (req, res) =>{
   }
 }
 
+const verVideojuegoEnCarrito = async (req, res) =>{
+  const result = await serviciosVideojuegos.mostrarVideojuegoEnCarrito(req.idUsuario)
+  if (result.statusCode === 200) {
+    res.status(200).json({ carrito: result.carrito });
+  } else {
+    res.status(500).json({ msg: result.msg });
+  }
+}
+
 module.exports = {
   obtenerUnVideojuegoPorIdOTodos,
   crearVideojuego,
@@ -120,5 +129,6 @@ module.exports = {
   habilitarDeshabilitarJuegoPorId,
   imagenVideojuego,
   videojuegoAlCarrito,
-  sacarVideojuegoDelCarrito
+  sacarVideojuegoDelCarrito,
+  verVideojuegoEnCarrito
 }

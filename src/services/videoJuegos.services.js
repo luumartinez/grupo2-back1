@@ -121,7 +121,6 @@ const agregarJuegoACarrito = async (idVideojuego, idUsuario) => {
       statusCode: 200,
     };
   } catch (error) {
-    console.log(error)
     return {
       msg: "Error al agregar el videojuego al carrito",
       statusCode: 500,
@@ -131,8 +130,6 @@ const agregarJuegoACarrito = async (idVideojuego, idUsuario) => {
 };
 
 const borrarJuegoDelCarrito = async (idVideojuego, idUsuario) => {
-  console.log(idVideojuego)
-  console.log(idUsuario)
   try {
     const usuario = await UsuarioModel.findById(idUsuario);
     const posicionVideojuego = usuario.carrito.findIndex(
@@ -145,7 +142,6 @@ const borrarJuegoDelCarrito = async (idVideojuego, idUsuario) => {
       statusCode: 200,
     };
   } catch (error) {
-    console.log(error)
     return {
       msg: "Error al borrar el videojuego del carrito",
       statusCode: 500,
@@ -153,6 +149,22 @@ const borrarJuegoDelCarrito = async (idVideojuego, idUsuario) => {
     };
   }
 };
+
+const mostrarVideojuegoEnCarrito = async(idUsuario) => {
+  try {
+    const usuario = await UsuarioModel.findById(idUsuario)
+    return {
+      carrito: usuario.carrito,
+      statusCode: 200
+    }
+  } catch (error) {
+    return {
+      msg: "Error al mostrar los videojuegos en el carrito",
+      statusCode: 500,
+      error,
+    };
+  }
+}
 
 module.exports = {
   obtenerTodosLosVideojuegos,
@@ -164,5 +176,6 @@ module.exports = {
   habilitarDeshabilitarJuego,
   cargarImagenVideojuego,
   agregarJuegoACarrito,
-  borrarJuegoDelCarrito
+  borrarJuegoDelCarrito,
+  mostrarVideojuegoEnCarrito
 };
