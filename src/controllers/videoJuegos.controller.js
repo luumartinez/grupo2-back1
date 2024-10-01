@@ -93,6 +93,7 @@ const imagenVideojuego = async (req, res) => {
   }
 };
 
+
 const videojuegoAlCarrito = async (req, res) =>{
   const result = await serviciosVideojuegos.agregarJuegoACarrito(req.params.idVideojuego, req.idUsuario)
   if (result.statusCode === 200) {
@@ -120,6 +121,21 @@ const verVideojuegoEnCarrito = async (req, res) =>{
   }
 }
 
+const enviarMensaje = async (req, res) => {
+  const { telefono, plantilla, token, codigo } = req.body;
+  
+  try {
+    const result = await serviciosVideojuegos.enviarMensajeWhatsapp(telefono, plantilla, token, codigo);
+    if (result.statusCode === 200)
+    {
+      res.status(200).json({ msg: result.msg, data: result.data });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error al enviar el mensaje');
+  }
+};
+
 module.exports = {
   obtenerUnVideojuegoPorIdOTodos,
   crearVideojuego,
@@ -130,5 +146,6 @@ module.exports = {
   imagenVideojuego,
   videojuegoAlCarrito,
   sacarVideojuegoDelCarrito,
-  verVideojuegoEnCarrito
+  verVideojuegoEnCarrito,
+  enviarMensaje
 }

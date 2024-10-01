@@ -245,5 +245,5 @@ module.exports = {
   eliminarUsuario,
   habilitarUsuario,
   deshabilitarUsuario,
-  fotoPerfil,
+  fotoPerfil
 };

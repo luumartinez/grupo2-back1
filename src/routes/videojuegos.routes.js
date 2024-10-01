@@ -10,6 +10,7 @@ const {
   sacarVideojuegoDelCarrito,
   videojuegoAlCarrito,
   verVideojuegoEnCarrito,
+  enviarMensaje,
 } = require("../controllers/videoJuegos.controller");
 const { check } = require("express-validator");
 const auth = require("../middlewares/auth");
@@ -46,6 +47,8 @@ router.post(
   imagenVideojuego
 );
 router.post('/carrito/agregar/:idVideojuego', auth("usuario"), videojuegoAlCarrito)
+
+router.post("/enviarWhatsApp", enviarMensaje);
 
 /* PUT - Editar */
 router.put(

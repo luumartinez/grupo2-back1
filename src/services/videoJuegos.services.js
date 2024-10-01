@@ -2,6 +2,7 @@ const VideojuegoModel = require("../models/videojuegos.schema");
 const cloudinary = require("../helpers/cloudinary");
 const UsuarioModel = require("../models/usuarios.schema");
 const mongoose = require("mongoose");
+const configHeaderWhatsApp = require("../helpers/configMeta");
 
 const obtenerTodosLosVideojuegos = async (limit, to) => {
   const [videojuegos, cantidadTotal] = await Promise.all([
@@ -166,6 +167,42 @@ const mostrarVideojuegoEnCarrito = async(idUsuario) => {
   }
 }
 
+const enviarMensajeWhatsapp = async (telefono, plantilla, token, codigo) => {
+  const telefonoId = process.env.META_TEL_ID;
+  const url = `https://graph.facebook.com/v20.0/${telefonoId}/messages`;
+  const code = codigo || 'en_US';
+
+  const mensaje = {
+    messaging_product: "whatsapp",
+    to: telefono,
+    type: "template",
+    template: {
+      name: plantilla,
+      language: { code: code },
+    },
+  };
+
+  try {
+    const response = await fetch(url, configHeaderWhatsApp(token, mensaje));
+    const data = await response.json();
+
+    if (response.ok) {
+      return {
+        msg: `Mensaje enviado correctamente a ${telefono}`,
+        data,
+        statusCode: 200
+      }
+    } else {
+      console.error(`Error al enviar el mensaje: ${data.error.message}`);
+      throw new Error(data.error.message);
+    }
+  } catch (error) {
+    console.error(`Error en la solicitud: ${error.message}`);
+    throw error; 
+  }
+};
+
+
 module.exports = {
   obtenerTodosLosVideojuegos,
   obtenerUnVideojuego,
@@ -178,4 +215,5 @@ module.exports = {
   agregarJuegoACarrito,
   borrarJuegoDelCarrito,
   mostrarVideojuegoEnCarrito
+  enviarMensajeWhatsapp,
 };
