@@ -19,8 +19,10 @@ const nuevoUsuario = async (body) => {
 
     let salt = bcrypt.genSaltSync();
     body.contrasenia = bcrypt.hashSync(body.contrasenia, salt);
-    
-    registroUsuario()
+
+    // Invoca registroUsuario con el email proporcionado en el body
+    await registroUsuario(body.nombre, body.apellido, body.email);
+
     const usuario = new UsuarioModel(body);
     await usuario.save();
 

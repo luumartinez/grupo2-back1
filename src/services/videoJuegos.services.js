@@ -210,7 +210,7 @@ const agregarJuegoAFavoritos = async (idVideojuego, idUsuario) => {
 const borrarJuegoDeFavoritos = async (idVideojuego, idUsuario) => {
   try {
     const usuario = await UsuarioModel.findById(idUsuario);
-    const videojuegoExistente = await usuario.favoritos.find(
+    const videojuegoExistente = usuario.favoritos.find(
       (juego) => juego._id.toString() === idVideojuego
     );
     if (videojuegoExistente) {
@@ -229,15 +229,6 @@ const borrarJuegoDeFavoritos = async (idVideojuego, idUsuario) => {
         statusCode: 404,
       };
     }
-
-const mostrarVideojuegoEnCarrito = async (idUsuario) => {
-  try {
-    const usuario = await UsuarioModel.findById(idUsuario);
-    return {
-      carrito: usuario.carrito,
-      statusCode: 200,
-    };
-
   } catch (error) {
     return {
       msg: "Error al borrar el videojuego de favoritos",
@@ -343,3 +334,4 @@ module.exports = {
   pagoVideojuegoConMp,
   enviarMensajeWhatsapp
 };
+
