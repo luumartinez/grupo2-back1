@@ -121,6 +121,33 @@ const verVideojuegoEnCarrito = async (req, res) =>{
   }
 }
 
+const marcarVideojuegoFavorito = async (req, res) =>{
+  const result = await serviciosVideojuegos.agregarJuegoAFavoritos(req.params.idVideojuego, req.idUsuario)
+  if (result.statusCode === 200) {
+    res.status(200).json({ msg: result.msg });
+  } else {
+    res.status(500).json({ msg: result.msg });
+  }
+}
+
+const sacarVideojuegoDeFavoritos = async (req, res) =>{
+  const result = await serviciosVideojuegos.borrarJuegoDeFavoritos(req.params.idVideojuego, req.idUsuario)
+  if (result.statusCode === 200) {
+    res.status(200).json({ msg: result.msg });
+  } else {
+    res.status(500).json({ msg: result.msg });
+  }
+}
+
+const verVideojuegosFavoritos = async (req, res) =>{
+  const result = await serviciosVideojuegos.mostrarVideojuegosFavoritos(req.idUsuario)
+  if (result.statusCode === 200) {
+    res.status(200).json({ favoritos: result.favoritos });
+  } else {
+    res.status(500).json({ msg: result.msg });
+  }
+}
+
 const enviarMensaje = async (req, res) => {
   const { telefono, plantilla, token, codigo } = req.body;
   
@@ -147,5 +174,8 @@ module.exports = {
   videojuegoAlCarrito,
   sacarVideojuegoDelCarrito,
   verVideojuegoEnCarrito,
-  enviarMensaje
+  enviarMensaje,
+  marcarVideojuegoFavorito,
+  sacarVideojuegoDeFavoritos,
+  verVideojuegosFavoritos
 }

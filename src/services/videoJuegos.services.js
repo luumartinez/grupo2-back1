@@ -118,7 +118,7 @@ const agregarJuegoACarrito = async (idVideojuego, idUsuario) => {
     usuario.carrito.push(videojuego);
     await usuario.save();
     return {
-      msg: "Producto agregado al carrito",
+      msg: "Videojuego agregado al carrito",
       statusCode: 200,
     };
   } catch (error) {
@@ -133,15 +133,25 @@ const agregarJuegoACarrito = async (idVideojuego, idUsuario) => {
 const borrarJuegoDelCarrito = async (idVideojuego, idUsuario) => {
   try {
     const usuario = await UsuarioModel.findById(idUsuario);
-    const posicionVideojuego = usuario.carrito.findIndex(
-      (videoJuego) => videoJuego._id.toString() === idVideojuego
+    const videojuegoExistente = await usuario.carrito.find(
+      (juego) => juego._id.toString() === idVideojuego
     );
-    usuario.carrito.splice(posicionVideojuego, 1);
-    await usuario.save();
-    return {
-      msg: "Producto borrado del carrito",
-      statusCode: 200,
-    };
+    if (videojuegoExistente) {
+      const posicionVideojuego = usuario.carrito.findIndex(
+        (videoJuego) => videoJuego._id.toString() === idVideojuego
+      );
+      usuario.carrito.splice(posicionVideojuego, 1);
+      await usuario.save();
+      return {
+        msg: "Sacaste el videojuego del carrito",
+        statusCode: 200,
+      };
+    } else {
+      return {
+        msg: "No se encontró el videojuego en el carrito",
+        statusCode: 404,
+      };
+    }
   } catch (error) {
     return {
       msg: "Error al borrar el videojuego del carrito",
@@ -151,13 +161,13 @@ const borrarJuegoDelCarrito = async (idVideojuego, idUsuario) => {
   }
 };
 
-const mostrarVideojuegoEnCarrito = async(idUsuario) => {
+const mostrarVideojuegoEnCarrito = async (idUsuario) => {
   try {
-    const usuario = await UsuarioModel.findById(idUsuario)
+    const usuario = await UsuarioModel.findById(idUsuario);
     return {
       carrito: usuario.carrito,
-      statusCode: 200
-    }
+      statusCode: 200,
+    };
   } catch (error) {
     return {
       msg: "Error al mostrar los videojuegos en el carrito",
@@ -165,12 +175,88 @@ const mostrarVideojuegoEnCarrito = async(idUsuario) => {
       error,
     };
   }
-}
+};
+
+const agregarJuegoAFavoritos = async (idVideojuego, idUsuario) => {
+  try {
+    const videojuego = await VideojuegoModel.findById(idVideojuego);
+    const usuario = await UsuarioModel.findById(idUsuario);
+    const videojuegoRepetido = usuario.favoritos.find(
+      (juego) => juego._id.toString() === idVideojuego
+    );
+    if (!videojuegoRepetido) {
+      usuario.favoritos.push(videojuego);
+      await usuario.save();
+      return {
+        msg: "Videojuego marcado como favorito",
+        statusCode: 200,
+      };
+    } else {
+      return {
+        msg: "El videojuego ya se marcó como favorito",
+        statusCode: 500,
+      };
+    }
+  } catch (error) {
+    return {
+      msg: "Error al marcar el videojuego como favorito",
+      statusCode: 500,
+      error,
+    };
+  }
+};
+
+const borrarJuegoDeFavoritos = async (idVideojuego, idUsuario) => {
+  try {
+    const usuario = await UsuarioModel.findById(idUsuario);
+    const videojuegoExistente = await usuario.favoritos.find(
+      (juego) => juego._id.toString() === idVideojuego
+    );
+    if (videojuegoExistente) {
+      const posicionVideojuego = usuario.favoritos.findIndex(
+        (videoJuego) => videoJuego._id.toString() === idVideojuego
+      );
+      usuario.favoritos.splice(posicionVideojuego, 1);
+      await usuario.save();
+      return {
+        msg: "Sacaste el videojuego de tus favoritos",
+        statusCode: 200,
+      };
+    } else {
+      return {
+        msg: "No se encontró el videojuego en tus favoritos",
+        statusCode: 404,
+      };
+    }
+  } catch (error) {
+    return {
+      msg: "Error al borrar el videojuego de favoritos",
+      statusCode: 500,
+      error,
+    };
+  }
+};
+
+const mostrarVideojuegosFavoritos = async (idUsuario) => {
+  try {
+    const usuario = await UsuarioModel.findById(idUsuario);
+      return {
+        favoritos: usuario.favoritos,
+        statusCode: 200,
+      };
+  } catch (error) {
+    return {
+      msg: "Error al mostrar los videojuegos favoritos",
+      statusCode: 500,
+      error,
+    };
+  }
+};
 
 const enviarMensajeWhatsapp = async (telefono, plantilla, token, codigo) => {
   const telefonoId = process.env.META_TEL_ID;
   const url = `https://graph.facebook.com/v20.0/${telefonoId}/messages`;
-  const code = codigo || 'en_US';
+  const code = codigo || "en_US";
 
   const mensaje = {
     messaging_product: "whatsapp",
@@ -190,18 +276,17 @@ const enviarMensajeWhatsapp = async (telefono, plantilla, token, codigo) => {
       return {
         msg: `Mensaje enviado correctamente a ${telefono}`,
         data,
-        statusCode: 200
-      }
+        statusCode: 200,
+      };
     } else {
       console.error(`Error al enviar el mensaje: ${data.error.message}`);
       throw new Error(data.error.message);
     }
   } catch (error) {
     console.error(`Error en la solicitud: ${error.message}`);
-    throw error; 
+    throw error;
   }
 };
-
 
 module.exports = {
   obtenerTodosLosVideojuegos,
@@ -214,6 +299,9 @@ module.exports = {
   cargarImagenVideojuego,
   agregarJuegoACarrito,
   borrarJuegoDelCarrito,
-  mostrarVideojuegoEnCarrito
+  mostrarVideojuegoEnCarrito,
   enviarMensajeWhatsapp,
+  agregarJuegoAFavoritos,
+  borrarJuegoDeFavoritos,
+  mostrarVideojuegosFavoritos,
 };

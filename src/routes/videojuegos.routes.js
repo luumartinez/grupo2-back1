@@ -11,6 +11,9 @@ const {
   videojuegoAlCarrito,
   verVideojuegoEnCarrito,
   enviarMensaje,
+  verVideojuegosFavoritos,
+  marcarVideojuegoFavorito,
+  sacarVideojuegoDeFavoritos,
 } = require("../controllers/videoJuegos.controller");
 const { check } = require("express-validator");
 const auth = require("../middlewares/auth");
@@ -21,6 +24,7 @@ const router = express.Router();
 router.get("/", obtenerUnVideojuegoPorIdOTodos);
 router.get("/buscar", buscarVideojuegoPorTermino);
 router.get("/carrito", auth("usuario"), verVideojuegoEnCarrito)
+router.get("/favoritos", auth("usuario"), verVideojuegosFavoritos)
 /* POST - Crear */
 router.post(
   "/",
@@ -47,6 +51,7 @@ router.post(
   imagenVideojuego
 );
 router.post('/carrito/agregar/:idVideojuego', auth("usuario"), videojuegoAlCarrito)
+router.post('/favoritos/agregar/:idVideojuego', auth("usuario"), marcarVideojuegoFavorito)
 
 router.post("/enviarWhatsApp", enviarMensaje);
 
@@ -78,5 +83,6 @@ router.put(
 /* DELETE - Borrar */
 router.delete("/:idVideojuego", auth("admin"), eliminarVideojuegoPorId);
 router.delete("/eliminarDelCarrito/:idVideojuego", auth("usuario"), sacarVideojuegoDelCarrito);
+router.delete("/eliminarDeFavoritos/:idVideojuego", auth("usuario"), sacarVideojuegoDeFavoritos);
 
 module.exports = router;
