@@ -11,6 +11,7 @@ const {
   videojuegoAlCarrito,
   verVideojuegoEnCarrito,
   enviarMensaje,
+  mercadoPago,
 } = require("../controllers/videoJuegos.controller");
 const { check } = require("express-validator");
 const auth = require("../middlewares/auth");
@@ -50,6 +51,8 @@ router.post('/carrito/agregar/:idVideojuego', auth("usuario"), videojuegoAlCarri
 
 router.post("/enviarWhatsApp", enviarMensaje);
 
+router.post('/pagarConMp', auth("usuario"), mercadoPago)
+
 /* PUT - Editar */
 router.put(
   "/:idVideojuego",
@@ -78,5 +81,7 @@ router.put(
 /* DELETE - Borrar */
 router.delete("/:idVideojuego", auth("admin"), eliminarVideojuegoPorId);
 router.delete("/eliminarDelCarrito/:idVideojuego", auth("usuario"), sacarVideojuegoDelCarrito);
+
+
 
 module.exports = router;

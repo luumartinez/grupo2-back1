@@ -136,6 +136,16 @@ const enviarMensaje = async (req, res) => {
   }
 };
 
+const mercadoPago = async (req, res) => {
+  const result = await serviciosVideojuegos.pagoVideojuegoConMp(req.body)
+
+  if(result.statusCode === 200){
+    res.status(200).json({msg: result.msg, urlMP: result.urlPay, urlPoint: result.urlPoint } )
+  }else{
+    res.status(500).json({msg: result.msg})
+  }
+}
+
 module.exports = {
   obtenerUnVideojuegoPorIdOTodos,
   crearVideojuego,
@@ -147,5 +157,6 @@ module.exports = {
   videojuegoAlCarrito,
   sacarVideojuegoDelCarrito,
   verVideojuegoEnCarrito,
-  enviarMensaje
+  enviarMensaje,
+  mercadoPago
 }
