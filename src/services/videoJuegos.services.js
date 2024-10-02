@@ -3,6 +3,7 @@ const cloudinary = require("../helpers/cloudinary");
 const UsuarioModel = require("../models/usuarios.schema");
 const mongoose = require("mongoose");
 const configHeaderWhatsApp = require("../helpers/configMeta");
+const { MercadoPagoConfig, Preference } = require("mercadopago");
 
 const obtenerTodosLosVideojuegos = async (limit, to) => {
   const [videojuegos, cantidadTotal] = await Promise.all([
@@ -151,13 +152,13 @@ const borrarJuegoDelCarrito = async (idVideojuego, idUsuario) => {
   }
 };
 
-const mostrarVideojuegoEnCarrito = async(idUsuario) => {
+const mostrarVideojuegoEnCarrito = async (idUsuario) => {
   try {
-    const usuario = await UsuarioModel.findById(idUsuario)
+    const usuario = await UsuarioModel.findById(idUsuario);
     return {
       carrito: usuario.carrito,
-      statusCode: 200
-    }
+      statusCode: 200,
+    };
   } catch (error) {
     return {
       msg: "Error al mostrar los videojuegos en el carrito",
@@ -165,12 +166,12 @@ const mostrarVideojuegoEnCarrito = async(idUsuario) => {
       error,
     };
   }
-}
+};
 
 const enviarMensajeWhatsapp = async (telefono, plantilla, token, codigo) => {
   const telefonoId = process.env.META_TEL_ID;
   const url = `https://graph.facebook.com/v20.0/${telefonoId}/messages`;
-  const code = codigo || 'en_US';
+  const code = codigo || "en_US";
 
   const mensaje = {
     messaging_product: "whatsapp",
@@ -190,18 +191,42 @@ const enviarMensajeWhatsapp = async (telefono, plantilla, token, codigo) => {
       return {
         msg: `Mensaje enviado correctamente a ${telefono}`,
         data,
-        statusCode: 200
-      }
+        statusCode: 200,
+      };
     } else {
       console.error(`Error al enviar el mensaje: ${data.error.message}`);
       throw new Error(data.error.message);
     }
   } catch (error) {
     console.error(`Error en la solicitud: ${error.message}`);
-    throw error; 
+    throw error;
   }
 };
 
+const pagoVideojuegoConMp = async (body) => {
+  const client = new MercadoPagoConfig({
+    accessToken: process.env.MP_ACCESS_TOKEN,
+  });
+  const preference = new Preference(client);
+
+  try {
+    const result = await preference.create(body);
+
+    return {
+      msg: "La transacción fue aprobada",
+      urlPay: result.id,
+      urlPoint: result.init_point,
+      statusCode: 200,
+    };
+  } catch (error) {
+    console.error("Error al crear la preferencia de pago:", error);
+    return {
+      msg: "Error al procesar el pago",
+      statusCode: 500,
+      error: error.message,
+    };
+  }
+};
 
 module.exports = {
   obtenerTodosLosVideojuegos,
@@ -214,6 +239,7 @@ module.exports = {
   cargarImagenVideojuego,
   agregarJuegoACarrito,
   borrarJuegoDelCarrito,
-  mostrarVideojuegoEnCarrito
+  mostrarVideojuegoEnCarrito,
   enviarMensajeWhatsapp,
+  pagoVideojuegoConMp,
 };

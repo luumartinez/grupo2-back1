@@ -136,6 +136,8 @@ const enviarMensaje = async (req, res) => {
   }
 };
 
+
+
 module.exports = {
   obtenerUnVideojuegoPorIdOTodos,
   crearVideojuego,
@@ -147,5 +149,6 @@ module.exports = {
   videojuegoAlCarrito,
   sacarVideojuegoDelCarrito,
   verVideojuegoEnCarrito,
-  enviarMensaje
+  enviarMensaje,
+  mercadoPago
 }
