@@ -2,7 +2,7 @@ const UsuarioModel = require("../models/usuarios.schema");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const cloudinary = require("../helpers/cloudinary");
-const { registroUsuario } = require("../helpers/mensajes");
+const { registroUsuario, recuperoContraseniaUsuario } = require("../helpers/mensajes");
 
 const nuevoUsuario = async (body) => {
   try {
@@ -20,6 +20,7 @@ const nuevoUsuario = async (body) => {
     let salt = bcrypt.genSaltSync();
     body.contrasenia = bcrypt.hashSync(body.contrasenia, salt);
     
+    registroUsuario()
     const usuario = new UsuarioModel(body);
     await usuario.save();
 
@@ -236,6 +237,53 @@ const fotoPerfil = async (idUsuario, file) => {
   }
 };
 
+// Servicio para solicitar el restablecimiento de la contraseña
+const solicitarRestablecimientoContrasenia = async (email) => {
+  try {
+    // Buscar el usuario por correo electrónico
+    const user = await UsuarioModel.findOne({ email });
+    if (!user) {
+      throw new Error('Usuario no encontrado');
+    }
+
+    // Generar un token JWT con expiración de 1 hora
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+    // Llamar al servicio de nodemailer para enviar el correo
+    const response = await recuperoContraseniaUsuario(token, email);
+    return response;
+
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+// Servicio para cambiar la contraseña
+const cambiarContrasenia = async (token, newPassword) => {
+  try {
+    // Verificar y decodificar el token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    // Buscar al usuario por ID extraído del token
+    const user = await UsuarioModel.findById(decoded.id);
+    if (!user) {
+      throw new Error('Usuario no encontrado');
+    }
+
+    // Encriptar la nueva contraseña
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    // Actualizar la contraseña del usuario
+    user.contrasenia = hashedPassword;
+    await user.save();
+
+    return { message: 'Contraseña actualizada con éxito' };
+  } catch (error) {
+    throw new Error(error.message || 'Error al cambiar la contraseña');
+  }
+};
+
+
 module.exports = {
   nuevoUsuario,
   inicioSesion,
@@ -245,5 +293,7 @@ module.exports = {
   eliminarUsuario,
   habilitarUsuario,
   deshabilitarUsuario,
-  fotoPerfil
+  fotoPerfil,
+  solicitarRestablecimientoContrasenia,
+  cambiarContrasenia
 };

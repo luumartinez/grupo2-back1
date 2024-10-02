@@ -3,6 +3,7 @@ const cloudinary = require("../helpers/cloudinary");
 const UsuarioModel = require("../models/usuarios.schema");
 const mongoose = require("mongoose");
 const configHeaderWhatsApp = require("../helpers/configMeta");
+const { MercadoPagoConfig, Preference } = require("mercadopago");
 
 const obtenerTodosLosVideojuegos = async (limit, to) => {
   const [videojuegos, cantidadTotal] = await Promise.all([
@@ -228,6 +229,15 @@ const borrarJuegoDeFavoritos = async (idVideojuego, idUsuario) => {
         statusCode: 404,
       };
     }
+
+const mostrarVideojuegoEnCarrito = async (idUsuario) => {
+  try {
+    const usuario = await UsuarioModel.findById(idUsuario);
+    return {
+      carrito: usuario.carrito,
+      statusCode: 200,
+    };
+
   } catch (error) {
     return {
       msg: "Error al borrar el videojuego de favoritos",
@@ -288,6 +298,32 @@ const enviarMensajeWhatsapp = async (telefono, plantilla, token, codigo) => {
   }
 };
 
+
+const pagoVideojuegoConMp = async (body) => {
+  const client = new MercadoPagoConfig({
+    accessToken: process.env.MP_ACCESS_TOKEN,
+  });
+  const preference = new Preference(client);
+
+  try {
+    const result = await preference.create(body);
+
+    return {
+      msg: "La transacción fue aprobada",
+      urlPay: result.id,
+      urlPoint: result.init_point,
+      statusCode: 200,
+    };
+  } catch (error) {
+    console.error("Error al crear la preferencia de pago:", error);
+    return {
+      msg: "Error al procesar el pago",
+      statusCode: 500,
+      error: error.message,
+    };
+  }
+};
+
 module.exports = {
   obtenerTodosLosVideojuegos,
   obtenerUnVideojuego,
@@ -304,4 +340,6 @@ module.exports = {
   agregarJuegoAFavoritos,
   borrarJuegoDeFavoritos,
   mostrarVideojuegosFavoritos,
+  pagoVideojuegoConMp,
+  enviarMensajeWhatsapp
 };
