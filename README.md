@@ -53,6 +53,7 @@ Sigue estos pasos para instalar el proyecto localmente:
     EMAIL_USER=tu_correo@example.com
     EMAIL_PASSWORD=tu_contraseña
     META_TEL_ID=tu_id_de_meta
+    MP_ACCESS_TOKEN=Tu_token_de_mercado_pago
     
 
 ## Uso
@@ -62,3 +63,32 @@ Para iniciar el servidor, ejecuta el siguiente comando:
 Coloca el siguiente comando en tu consola para iniciar el backend, puede demorar mas tiempo dependiendo de tu hardware.
 
 npm start
+
+## Tecnologías Utilizadas
+
+Este proyecto fue construido utilizando las siguientes tecnologías:
+
+- **Node.js**: Entorno de ejecución para JavaScript del lado del servidor.
+- **Express.js**: Framework web para Node.js que facilita el desarrollo de aplicaciones y APIs.
+- **MongoDB**: Base de datos NoSQL que almacena datos en un formato flexible.
+- **Mongoose**: ODM (Object Data Modeling) para MongoDB, que permite modelar datos y realizar consultas de manera sencilla.
+- **Electron**: Framework que permite construir aplicaciones de escritorio multiplataforma con tecnologías web.
+- **dotenv**: Librería para cargar variables de entorno desde un archivo `.env`.
+- **Nodemailer**: Módulo para enviar correos electrónicos desde aplicaciones Node.js.
+- **Cloudinary**: Servicio de gestión de imágenes y videos en la nube.
+- **Mercado Pago**: Plataforma de pagos online que facilita la integración de métodos de pago en la aplicación.
+
+## Contribución
+
+Las contribuciones son bienvenidas. Para contribuir a este proyecto:
+
+1. Haz un fork del repositorio.
+2. Crea una nueva rama para tu funcionalidad (`git checkout -b nueva-funcionalidad`).
+3. Realiza tus cambios y haz un commit (`git commit -m 'Agrega nueva funcionalidad'`).
+4. Sube los cambios a tu fork (`git push origin nueva-funcionalidad`).
+5. Abre un pull request para que podamos revisar tus cambios.
+
+## Licencia
+
+Este proyecto es un esfuerzo colaborativo entre compañeros y se encuentra bajo la licencia de uso público. Puedes utilizar, modificar y compartir el código, 
+pero se recomienda dar crédito a los autores originales. 

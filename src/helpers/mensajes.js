@@ -3,8 +3,8 @@ const transporter = require('../helpers/nodemailer')
 const registroUsuario = async(nombre, apellido, emailUsuario) => {
   // send mail with defined transport object
   const info = await transporter.sendMail({
-    from: `Bienvenido a nuestra pagina!!!👻" <${process.env.GMAIL_USER}>`, // sender address
-    to: `rafaelortega1911@gmail.com`, // list of receivers
+    from: `Bienvenido a nuestra página!!!👻 <${process.env.GMAIL_USER}>`, // sender address
+    to: emailUsuario, // list of receivers (email pasado como argumento)
     subject: "Bienvenido ✔", // Subject line
     html: `
      <div>
@@ -18,7 +18,9 @@ const registroUsuario = async(nombre, apellido, emailUsuario) => {
     </div>
     `, // html body
   });
-}
+
+  return info; // Retorna info si es necesario para manejar la respuesta
+};
 
 const pagoProductosUsuario = async() => {
   // send mail with defined transport object
@@ -45,7 +47,7 @@ const recuperoContraseniaUsuario = async (token, email) => {
     // Enviar el correo de recuperación con el token incluido
     const info = await transporter.sendMail({
       from: `"Recuperación de Contraseña" <${process.env.GMAIL_USER}>`,
-      to: `rafaelortega1911@gmail.com`,
+      to: email,
       subject: 'Recupera tu contraseña',
       html: `
         <div>
