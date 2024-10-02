@@ -242,4 +242,5 @@ module.exports = {
   mostrarVideojuegoEnCarrito,
   enviarMensajeWhatsapp,
   pagoVideojuegoConMp,
+  enviarMensajeWhatsapp
 };

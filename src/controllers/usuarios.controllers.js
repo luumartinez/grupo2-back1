@@ -126,6 +126,32 @@ const agregarFotoPerfil = async (req, res) => {
   }
 };
 
+// Controlador para manejar la solicitud de restablecimiento de contraseña
+const olvidoContraseniaControlador = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    // Llamar al servicio que maneja la recuperación de contraseña
+    const response = await serviceUsuario.solicitarRestablecimientoContrasenia(email);
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Controlador para cambiar la contraseña usando el token
+const cambiarContraseniaControlador = async (req, res) => {
+  const { token, newPassword } = req.body;
+
+  try {
+    // Llamar al servicio que cambia la contraseña
+    const response = await serviceUsuario.cambiarContrasenia(token, newPassword);
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 
 module.exports = {
   registrarUsuario,
@@ -135,5 +161,7 @@ module.exports = {
   editarUsuario,
   eliminarUnUsuario,
   cambiarEstadoUsuario,
-  agregarFotoPerfil
+  agregarFotoPerfil,
+  olvidoContraseniaControlador,
+  cambiarContraseniaControlador
 };
