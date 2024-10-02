@@ -51,7 +51,7 @@ router.post('/carrito/agregar/:idVideojuego', auth("usuario"), videojuegoAlCarri
 
 router.post("/enviarWhatsApp", enviarMensaje);
 
-router.post('/pagarConMp', mercadoPago)
+router.post('/pagarConMp', auth("usuario"), mercadoPago)
 
 /* PUT - Editar */
 router.put(
