@@ -30,7 +30,6 @@ router.get("/favoritos", auth("usuario"), verVideojuegosFavoritos)
 /* POST - Crear */
 router.post(
   "/",
-  multer.single("imagen"),
   [
     // Usar multer para cargar imagen si es necesario
     check("nombre", "campo NOMBRE vacío").not().isEmpty(),

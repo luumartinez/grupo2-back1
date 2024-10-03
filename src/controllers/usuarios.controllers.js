@@ -9,8 +9,6 @@ const registrarUsuario = async (req, res) => {
       return res.status(400).json({ msg: errors[0].msg });
     }
 
-    console.log('Datos recibidos para registrar usuario:', req.body);
-
     const result = await serviceUsuario.nuevoUsuario(req.body);
 
     if (result.status === 201) {
