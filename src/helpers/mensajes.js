@@ -31,11 +31,11 @@ const registroUsuario = async(nombre, apellido, emailUsuario) => {
   return info; // Retorna info si es necesario para manejar la respuesta
 };
 
-const pagoProductosUsuario = async() => {
+const pagoProductosUsuario = async(emailUsuario) => {
   // send mail with defined transport object
   const info = await transporter.sendMail({
     from: `Pago exitoso!!!👻" <${process.env.GMAIL_USER}>`, // sender address
-    to: `rafaelortega1911@gmail.com`, // list of receivers
+    to: emailUsuario, // list of receivers
     subject: "Gracias por tu compra ✔", // Subject line
     html: `
      <div>

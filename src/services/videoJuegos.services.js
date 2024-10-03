@@ -4,6 +4,7 @@ const UsuarioModel = require("../models/usuarios.schema");
 const mongoose = require("mongoose");
 const configHeaderWhatsApp = require("../helpers/configMeta");
 const { MercadoPagoConfig, Preference } = require("mercadopago");
+const { pagoProductosUsuario } = require("../helpers/mensajes");
 
 const obtenerTodosLosVideojuegos = async (limit, to) => {
   const [videojuegos, cantidadTotal] = await Promise.all([
@@ -315,6 +316,25 @@ const pagoVideojuegoConMp = async (body) => {
   }
 };
 
+const emailConfirmarPago = async (id) => {
+  try {
+    const usuario = await UsuarioModel.findById(id);
+    console.log(usuario)
+    const result = await pagoProductosUsuario(usuario.email);
+    return {
+      msg: "Comprar confirmada",
+      statusCode: 200,
+    };
+  } catch (error) {
+    console.error("Error al confirmar compra:", error);
+    return {
+      msg: "Error al confirmar el pago",
+      statusCode: 500,
+      error: error.message,
+    };
+  }
+};
+
 module.exports = {
   obtenerTodosLosVideojuegos,
   obtenerUnVideojuego,
@@ -332,6 +352,7 @@ module.exports = {
   borrarJuegoDeFavoritos,
   mostrarVideojuegosFavoritos,
   pagoVideojuegoConMp,
-  enviarMensajeWhatsapp
+  enviarMensajeWhatsapp,
+  emailConfirmarPago 
 };
 
