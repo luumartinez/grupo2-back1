@@ -80,7 +80,7 @@ router.post(
 router.post(
   "/fotoPerfil/:idUsuario",
   multer.single("foto"),
-  auth("admin"),
+  auth("usuario"),
   agregarFotoPerfil
 );
 
