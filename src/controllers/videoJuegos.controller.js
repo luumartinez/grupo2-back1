@@ -185,9 +185,6 @@ const enviarMensaje = async (req, res) => {
   const { telefono, plantilla, token, codigo } = req.body;
 
   try {
-    if (plantilla === "compraconfirmada") {
-      pagoProductosUsuario();
-    }
     const result = await serviciosVideojuegos.enviarMensajeWhatsapp(
       telefono,
       plantilla,
