@@ -258,7 +258,7 @@ const mostrarVideojuegosFavoritos = async (idUsuario) => {
 const enviarMensajeWhatsapp = async (telefono, plantilla, token, codigo) => {
   const telefonoId = process.env.META_TEL_ID;
   const url = `https://graph.facebook.com/v20.0/${telefonoId}/messages`;
-  const code = codigo || "en_US";
+  const code = codigo || "es_AR";
 
   const mensaje = {
     messaging_product: "whatsapp",
