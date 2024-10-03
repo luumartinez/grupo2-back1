@@ -16,9 +16,6 @@ const { check } = require("express-validator");
 const auth = require("../middlewares/auth");
 const multer = require("../middlewares/multer");
 const { recuperoContraseniaUsuario } = require("../helpers/mensajes");
-const UsuarioModel = require("../models/usuarios.schema");
-const jwt = require('jsonwebtoken');
-const { solicitarRestablecimientoContrasenia } = require("../services/usuarios.sevices");
 
 router.post(
   "/",
@@ -90,7 +87,6 @@ router.get("/:idUsuario", auth("admin"), obtenerUnUsuario);
 router.put("/:idUsuario/:accion", auth("admin"), cambiarEstadoUsuario);
 router.put("/:idUsuario", auth("admin"), editarUsuario);
 router.delete("/:idUsuario", auth("admin"), eliminarUnUsuario);
-router.post('/forgot-password',)
 
 router.post('/forgot-password', olvidoContraseniaControlador);
 router.post('/reset-password', cambiarContraseniaControlador);
