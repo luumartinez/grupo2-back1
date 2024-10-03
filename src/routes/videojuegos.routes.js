@@ -15,6 +15,7 @@ const {
   marcarVideojuegoFavorito,
   sacarVideojuegoDeFavoritos,
   mercadoPago,
+  confirmarPago,
 } = require("../controllers/videoJuegos.controller");
 const { check } = require("express-validator");
 const auth = require("../middlewares/auth");
@@ -56,6 +57,8 @@ router.post('/favoritos/agregar/:idVideojuego', auth("usuario"), marcarVideojueg
 router.post("/enviarWhatsApp", enviarMensaje);
 
 router.post('/pagarConMp', auth("usuario"), mercadoPago)
+
+router.post("/confirmarPago", auth("usuario"), confirmarPago);
 
 /* PUT - Editar */
 router.put(
