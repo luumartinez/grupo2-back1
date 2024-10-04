@@ -16,8 +16,8 @@ Cloudinary: para manejar y almacenar imágenes de usuarios y videojuegos. Ademá
 
 - [Instalación](#instalación)
 - [Uso](#uso)
-- [Rutas API](#rutas-api)
 - [Tecnologías Utilizadas](#tecnologías-utilizadas)
+- [Integrantes](#integrantes)
 - [Contribución](#contribución)
 - [Licencia](#licencia)
 
@@ -77,6 +77,12 @@ Este proyecto fue construido utilizando las siguientes tecnologías:
 - **Nodemailer**: Módulo para enviar correos electrónicos desde aplicaciones Node.js.
 - **Cloudinary**: Servicio de gestión de imágenes y videos en la nube.
 - **Mercado Pago**: Plataforma de pagos online que facilita la integración de métodos de pago en la aplicación.
+
+## Integrantes
+
+- [Pablo Gaston Gonzalez](https://www.linkedin.com/in/pablo-gaston-gonzalez)
+- [Maria Luisina Martinez](https://www.linkedin.com/in/luisina-martinez/)
+- [Nicolas Rafael Ortega](https://www.linkedin.com/in/rafael-ortega-nicolas/)
 
 ## Contribución
 
