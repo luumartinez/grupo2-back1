@@ -291,14 +291,33 @@ const enviarMensajeWhatsapp = async (telefono, plantilla, token, codigo) => {
 };
 
 
-const pagoVideojuegoConMp = async (body) => {
+const pagoVideojuegoConMp = async (id) => {
+  const usuario = await UsuarioModel.findById(id);
+  console.log(usuario.carrito);
+
   const client = new MercadoPagoConfig({
     accessToken: process.env.MP_ACCESS_TOKEN,
   });
   const preference = new Preference(client);
+  const items = usuario.carrito.map(item => ({
+    title: item.nombre, 
+    quantity: 1, 
+    unit_price: item.precio, 
+    currency_id: 'ARS', 
+  }));
 
   try {
-    const result = await preference.create(body);
+    const result = await preference.create({
+      body: {
+        items: items, 
+        back_urls: {
+          success: 'http://localhost:5173/user-cart',
+          failure: 'http://localhost:5173/user-cart',
+          pending: 'http://localhost:5173/user-cart',
+        },
+        auto_return: 'approved',
+      },
+    });
 
     return {
       msg: "La transacción fue aprobada",
@@ -316,10 +335,12 @@ const pagoVideojuegoConMp = async (body) => {
   }
 };
 
+
 const emailConfirmarPago = async (id) => {
   try {
     const usuario = await UsuarioModel.findById(id);
-    console.log(usuario)
+    usuario.carrito = [];
+    await usuario.save();
     const result = await pagoProductosUsuario(usuario.email);
     return {
       msg: "Comprar confirmada",

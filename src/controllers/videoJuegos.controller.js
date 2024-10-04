@@ -164,7 +164,7 @@ const enviarMensaje = async (req, res) => {
 };
 
 const mercadoPago = async (req, res) => {
-  const result = await serviciosVideojuegos.pagoVideojuegoConMp(req.body)
+  const result = await serviciosVideojuegos.pagoVideojuegoConMp(req.idUsuario)
 
   if(result.statusCode === 200){
     res.status(200).json({msg: result.msg, urlMP: result.urlPay, urlPoint: result.urlPoint } )
