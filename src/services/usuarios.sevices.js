@@ -48,7 +48,7 @@ const inicioSesion = async (body) => {
     if (!usuarioExiste) {
       return {
         code: 400,
-        msg: "Nombre de usuario no encontrado. Por favor, verifica tus credenciales."
+        msg: "Nombre de usuario o Contraseña no encontrados. Por favor, verifica tus credenciales e intentalo de nuevo."
       };
     }
 
@@ -76,7 +76,7 @@ const inicioSesion = async (body) => {
     } else {
       return {
         code: 400,
-        msg: "Contraseña incorrecta. Intenta nuevamente."
+        msg: "Correo o Contraseña incorrectos. Intenta nuevamente."
       };
     }
   } catch (error) {
@@ -239,19 +239,15 @@ const fotoPerfil = async (idUsuario, file) => {
   }
 };
 
-// Servicio para solicitar el restablecimiento de la contraseña
 const solicitarRestablecimientoContrasenia = async (email) => {
   try {
-    // Buscar el usuario por correo electrónico
     const user = await UsuarioModel.findOne({ email });
     if (!user) {
       throw new Error('Usuario no encontrado');
     }
 
-    // Generar un token JWT con expiración de 1 hora
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-    // Llamar al servicio de nodemailer para enviar el correo
     const response = await recuperoContraseniaUsuario(token, email);
     return response;
 
@@ -260,22 +256,17 @@ const solicitarRestablecimientoContrasenia = async (email) => {
   }
 };
 
-// Servicio para cambiar la contraseña
 const cambiarContrasenia = async (token, newPassword) => {
   try {
-    // Verificar y decodificar el token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    // Buscar al usuario por ID extraído del token
     const user = await UsuarioModel.findById(decoded.id);
     if (!user) {
       throw new Error('Usuario no encontrado');
     }
 
-    // Encriptar la nueva contraseña
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-    // Actualizar la contraseña del usuario
     user.contrasenia = hashedPassword;
     await user.save();
 
