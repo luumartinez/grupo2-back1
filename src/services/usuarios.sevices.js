@@ -52,6 +52,13 @@ const inicioSesion = async (body) => {
       };
     }
 
+    if (usuarioExiste.bloqueado) {
+      return {
+        code: 403,
+        msg: "Tu cuenta está bloqueada. Por favor, contacta al administrador."
+      };
+    }
+
     const verificacionContrasenia = bcrypt.compareSync(
       body.contrasenia,
       usuarioExiste.contrasenia
