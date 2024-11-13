@@ -117,8 +117,16 @@ const agregarJuegoACarrito = async (idVideojuego, idUsuario) => {
   try {
     const videojuego = await VideojuegoModel.findById(idVideojuego);
     const usuario = await UsuarioModel.findById(idUsuario);
+
+    if (usuario.bloqueado) {
+      return {
+        msg: "Tu cuenta está bloqueada. No puedes agregar juegos al carrito.",
+        statusCode: 403,
+      };
+    }
     usuario.carrito.push(videojuego);
     await usuario.save();
+
     return {
       msg: "Videojuego agregado al carrito",
       statusCode: 200,
@@ -131,6 +139,7 @@ const agregarJuegoACarrito = async (idVideojuego, idUsuario) => {
     };
   }
 };
+
 
 const borrarJuegoDelCarrito = async (idVideojuego, idUsuario) => {
   try {
@@ -186,6 +195,13 @@ const agregarJuegoAFavoritos = async (idVideojuego, idUsuario) => {
     const videojuegoRepetido = usuario.favoritos.find(
       (juego) => juego._id.toString() === idVideojuego
     );
+    if (usuario.bloqueado) {
+      return {
+        msg: "Tu cuenta está bloqueada. No puedes agregar juegos favoritos.",
+        statusCode: 403,
+      };
+    } 
+
     if (!videojuegoRepetido) {
       usuario.favoritos.push(videojuego);
       await usuario.save();
@@ -293,8 +309,12 @@ const enviarMensajeWhatsapp = async (telefono, plantilla, token, codigo) => {
 
 const pagoVideojuegoConMp = async (id) => {
   const usuario = await UsuarioModel.findById(id);
-  console.log(usuario.carrito);
-
+  if (usuario.bloqueado) {
+    return {
+      msg: "Tu cuenta está bloqueada. No puedes realizar la compra.",
+      statusCode: 403,
+    };
+  }
   const client = new MercadoPagoConfig({
     accessToken: process.env.MP_ACCESS_TOKEN,
   });
