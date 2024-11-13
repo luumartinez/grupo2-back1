@@ -72,7 +72,6 @@ Este proyecto fue construido utilizando las siguientes tecnologías:
 - **Express.js**: Framework web para Node.js que facilita el desarrollo de aplicaciones y APIs.
 - **MongoDB**: Base de datos NoSQL que almacena datos en un formato flexible.
 - **Mongoose**: ODM (Object Data Modeling) para MongoDB, que permite modelar datos y realizar consultas de manera sencilla.
-- **Electron**: Framework que permite construir aplicaciones de escritorio multiplataforma con tecnologías web.
 - **dotenv**: Librería para cargar variables de entorno desde un archivo `.env`.
 - **Nodemailer**: Módulo para enviar correos electrónicos desde aplicaciones Node.js.
 - **Cloudinary**: Servicio de gestión de imágenes y videos en la nube.
